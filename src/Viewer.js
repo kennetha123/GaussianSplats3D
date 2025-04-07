@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 import * as THREE from 'three';
 import { OrbitControls } from './OrbitControls.js';
 import { PlyLoader } from './loaders/ply/PlyLoader.js';
@@ -54,6 +55,14 @@ export class Viewer {
         // The initial focal point of the camera and center of the camera's orbit (only used when the viewer uses its own camera).
         if (!options.initialCameraLookAt) options.initialCameraLookAt = [0, 0, 0];
         this.initialCameraLookAt = new THREE.Vector3().fromArray(options.initialCameraLookAt);
+
+        // The maximum distance of the camera from center of the camera's orbit (only used when the viewer uses its own camera).
+        if (!options.initialCameraMaxView) options.initialCameraMaxView = 50;
+        this.initialCameraMaxView = options.initialCameraMaxView;
+
+        // The minimum distance of the camera from center of the camera's orbit (only used when the viewer uses its own camera).
+        if (!options.initialCameraMinView) options.initialCameraMinView = 18;
+        this.initialCameraMinView = options.initialCameraMinView;
 
         // 'dropInMode' is a flag that is used internally to support the usage of the viewer as a Three.js scene object
         this.dropInMode = options.dropInMode || false;
@@ -415,6 +424,8 @@ export class Viewer {
                 }
             }
             this.controls = this.camera.isOrthographicCamera ? this.orthographicControls : this.perspectiveControls;
+            this.controls.maxDistance = this.initialCameraMaxView;
+            this.controls.minDistance = this.initialCameraMinView;
             this.controls.update();
         }
     }
